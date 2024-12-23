@@ -1,11 +1,11 @@
 package com.example.demo.entity;
 
-
+import com.example.demo.model.AuditModel;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
