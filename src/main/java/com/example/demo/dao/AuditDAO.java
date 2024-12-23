@@ -30,7 +30,8 @@ public class AuditDAO {
             preparedStatement.setString(1, audit.getAction());
             preparedStatement.setString(2, audit.getTableName());
             preparedStatement.setLong(3, audit.getRecordId());
-            preparedStatement.setObject(4, audit.getTimestamp());
+//            preparedStatement.setObject(4, audit.getTimestamp());
+            preparedStatement.setTimestamp(4, java.sql.Timestamp.valueOf(audit.getTimestamp()));
             preparedStatement.setLong(5, audit.getUserId());
             preparedStatement.executeUpdate();
 

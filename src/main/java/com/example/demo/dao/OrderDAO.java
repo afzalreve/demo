@@ -39,16 +39,7 @@ public class OrderDAO {
             // Get the generated order ID
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                Long orderId = generatedKeys.getLong(1);
-
-                // Log the audit
-                Audit audit = new Audit();
-                audit.setAction("INSERT");
-                audit.setTableName("orders");
-                audit.setRecordId(orderId);
-                audit.setTimestamp(LocalDateTime.now());
-                audit.setUserId(order.getUserId());
-                auditDAO.logAudit(audit);
+                order.setId(generatedKeys.getLong(1));  // Set generated ID
             }
 
         } catch (SQLException e) {
