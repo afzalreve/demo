@@ -19,12 +19,9 @@ public class OrderService {
         orderDAO.saveOrder(order);
     }
 
-    public List<OrderDTO> getAllOrders() {
-        return orderDAO.getAllOrders();
-    }
 
     public OrderDTO getOrderById(Long id) {
-        return orderDAO.getOrderById(id);
+        return orderDAO.getOrder(id);
     }
 
     public void deleteOrder(Long id) {

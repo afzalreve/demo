@@ -19,10 +19,6 @@ public class OrderController {
         orderService.createOrder(order);
     }
 
-    @GetMapping
-    public List<OrderDTO> getAllOrders() {
-        return orderService.getAllOrders();
-    }
 
     @GetMapping("/{id}")
     public OrderDTO getOrderById(@PathVariable Long id) {
