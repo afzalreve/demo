@@ -1,12 +1,12 @@
 package com.example.demo.aspect;
 
-
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.entity.Audit;
 import com.example.demo.dao.AuditDAO;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,30 +17,45 @@ import java.time.LocalDateTime;
 public class SimpleJdbcAuditor {
 
     @Autowired
-    private AuditDAO auditDAO;  // Assuming you have AuditDAO to log the audit
+    private AuditDAO auditDAO;
 
-    // Intercepts methods in DAO layer
-    @Around("execution(* com.example.demo.dao.OrderDAO.saveOrder(..))")  // Adjust the method and package as needed
+    // Intercepts saveOrder and updateOrder methods in OrderDAO
+    @Around("execution(* com.example.demo.dao.OrderDAO.*Order(..))")
     public Object auditJdbcOperations(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
-        OrderDTO order = (OrderDTO) args[0];  // Assuming the first argument is OrderDTO
+        if (args[0] instanceof OrderDTO order) {
+            // Determine the method name to decide the action
+            String methodName = ((MethodSignature) joinPoint.getSignature()).getMethod().getName();
+            String action = determineAction(methodName);
 
-        // Proceed with the original method
-        Object result = joinPoint.proceed();
+            // Proceed with the original method
+            Object result = joinPoint.proceed();
 
-        // Log audit after the operation
-        logAudit(order);
+            // Log the audit
+            if (!action.equals("UNKNOWN")){
+                logAudit(order, action);
+            }
 
-        return result;
+            return result;
+        }
+        return joinPoint.proceed();
     }
 
-    private void logAudit(OrderDTO order) {
+    private String determineAction(String methodName) {
+        return switch (methodName) {
+            case "saveOrder" -> "INSERT";
+            case "updateOrder" -> "UPDATE";
+            default -> "UNKNOWN";
+        };
+    }
+
+    private void logAudit(OrderDTO order, String action) {
         Audit audit = new Audit();
-        audit.setAction("INSERT");
+        audit.setAction(action);
         audit.setTableName("orders");
-        audit.setRecordId(order.getId());  // Assuming 'id' is set after the insert
+        audit.setRecordId(order.getId());
         audit.setTimestamp(LocalDateTime.now());
         audit.setUserId(order.getUserId());
-        auditDAO.logAudit(audit);  // Assuming this method logs the audit in your DB
+        auditDAO.logAudit(audit);
     }
 }

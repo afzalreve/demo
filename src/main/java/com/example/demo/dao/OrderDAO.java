@@ -47,29 +47,6 @@ public class OrderDAO {
         }
     }
 
-    public void deleteOrder(Long orderId) {
-        String sql = "DELETE FROM orders WHERE id = ?";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setLong(1, orderId);
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected > 0) {
-                // Log the audit
-                Audit audit = new Audit();
-                audit.setAction("DELETE");
-                audit.setTableName("orders");
-                audit.setRecordId(orderId);
-                audit.setTimestamp(LocalDateTime.now());
-                auditDAO.logAudit(audit);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting order: " + e.getMessage(), e);
-        }
-    }
-
     public void updateOrder(OrderDTO order) {
         String sql = "UPDATE orders SET user_id = ?, product_id = ?, quantity = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
@@ -81,21 +58,25 @@ public class OrderDAO {
             preparedStatement.setLong(4, order.getId());
 
             int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                // Log the audit
-                Audit audit = new Audit();
-                audit.setAction("UPDATE");
-                audit.setTableName("orders");
-                audit.setRecordId(order.getId());
-                audit.setTimestamp(LocalDateTime.now());
-                audit.setUserId(order.getUserId());
-                audit.setUserId(order.getUserId());
-                auditDAO.logAudit(audit);
-            }
         } catch (SQLException e) {
             throw new RuntimeException("Error updating order: " + e.getMessage(), e);
         }
     }
+
+    public void deleteOrder(Long orderId) {
+        String sql = "DELETE FROM orders WHERE id = ?";
+        try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setLong(1, orderId);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting order: " + e.getMessage(), e);
+        }
+    }
+
 
     public OrderDTO getOrder(Long id) {
         String sql = "SELECT id, user_id, product_id, quantity, order_date FROM orders WHERE id = ?";

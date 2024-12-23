@@ -19,6 +19,10 @@ public class OrderController {
         orderService.createOrder(order);
     }
 
+    @PostMapping("/update")
+    public void updateOrder(@RequestBody OrderDTO order) {
+        orderService.updateOrder(order);
+    }
 
     @GetMapping("/{id}")
     public OrderDTO getOrderById(@PathVariable Long id) {

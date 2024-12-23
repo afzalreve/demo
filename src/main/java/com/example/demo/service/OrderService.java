@@ -19,6 +19,10 @@ public class OrderService {
         orderDAO.saveOrder(order);
     }
 
+    public void updateOrder(OrderDTO order) {
+        orderDAO.updateOrder(order);
+    }
+
 
     public OrderDTO getOrderById(Long id) {
         return orderDAO.getOrder(id);
