@@ -1,7 +1,6 @@
 package com.example.demo.dao;
 
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.entity.Audit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -20,11 +19,6 @@ public class OrderDAO {
     @Value("${spring.datasource.password}")
     private String jdbcPassword;
 
-    private final AuditDAO auditDAO;
-
-    public OrderDAO(AuditDAO auditDAO) {
-        this.auditDAO = auditDAO;
-    }
 
     public void saveOrder(OrderDTO order) {
         String sql = "INSERT INTO orders (user_id, product_id, quantity) VALUES (?, ?, ?)";
@@ -38,18 +32,6 @@ public class OrderDAO {
 
             // Get the generated order ID
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                Long orderId = generatedKeys.getLong(1);
-
-                // Log the audit
-                Audit audit = new Audit();
-                audit.setAction("INSERT");
-                audit.setTableName("orders");
-                audit.setRecordId(orderId);
-                audit.setTimestamp(LocalDateTime.now());
-                audit.setUserId(order.getUserId());
-                auditDAO.logAudit(audit);
-            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error saving order: " + e.getMessage(), e);
@@ -64,15 +46,6 @@ public class OrderDAO {
             preparedStatement.setLong(1, orderId);
             int rowsAffected = preparedStatement.executeUpdate();
 
-            if (rowsAffected > 0) {
-                // Log the audit
-                Audit audit = new Audit();
-                audit.setAction("DELETE");
-                audit.setTableName("orders");
-                audit.setRecordId(orderId);
-                audit.setTimestamp(LocalDateTime.now());
-                auditDAO.logAudit(audit);
-            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting order: " + e.getMessage(), e);
@@ -90,17 +63,6 @@ public class OrderDAO {
             preparedStatement.setLong(4, order.getId());
 
             int rowsAffected = preparedStatement.executeUpdate();
-            if (rowsAffected > 0) {
-                // Log the audit
-                Audit audit = new Audit();
-                audit.setAction("UPDATE");
-                audit.setTableName("orders");
-                audit.setRecordId(order.getId());
-                audit.setTimestamp(LocalDateTime.now());
-                audit.setUserId(order.getUserId());
-                audit.setUserId(order.getUserId());
-                auditDAO.logAudit(audit);
-            }
         } catch (SQLException e) {
             throw new RuntimeException("Error updating order: " + e.getMessage(), e);
         }
