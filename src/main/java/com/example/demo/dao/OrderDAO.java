@@ -20,11 +20,7 @@ public class OrderDAO {
     @Value("${spring.datasource.password}")
     private String jdbcPassword;
 
-    private final AuditDAO auditDAO;
 
-    public OrderDAO(AuditDAO auditDAO) {
-        this.auditDAO = auditDAO;
-    }
 
     public void saveOrder(OrderDTO order) {
         String sql = "INSERT INTO orders (user_id, product_id, quantity) VALUES (?, ?, ?)";
