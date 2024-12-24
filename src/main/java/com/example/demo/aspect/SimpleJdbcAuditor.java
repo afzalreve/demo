@@ -20,7 +20,7 @@ public class SimpleJdbcAuditor {
     private AuditDAO auditDAO;
 
     // Intercepts saveOrder and updateOrder methods in OrderDAO
-    @Around("execution(* com.example.demo.dao.OrderDAO.*Order(..))")
+//    @Around("execution(* com.example.demo.dao.OrderDAO.*Order(..))")
     public Object auditJdbcOperations(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         if (args[0] instanceof OrderDTO order) {
