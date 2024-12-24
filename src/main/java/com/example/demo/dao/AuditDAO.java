@@ -23,6 +23,7 @@ public class AuditDAO {
     private String jdbcPassword;
 
     public void logAudit(Audit audit) {
+        System.out.println("inside auditDAO.logAudit");
         String sql = "INSERT INTO audit_logs (action, table_name, record_id, timestamp, user_id) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
