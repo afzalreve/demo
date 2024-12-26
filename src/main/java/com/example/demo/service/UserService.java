@@ -13,12 +13,12 @@ public class UserService {
         this.userDAO = userDAO;
     }
 
-    public void saveUser( UserDTO userDTO) {
-        userDAO.saveUser(userDTO);
+    public UserDTO saveUser( UserDTO userDTO) {
+        return userDAO.saveUser(userDTO);
     }
 
-    public void updateUser( UserDTO userDTO) {
-        userDAO.updateUser(userDTO);
+    public UserDTO updateUser( UserDTO userDTO) {
+        return userDAO.updateUser(userDTO);
     }
 
 }

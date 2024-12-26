@@ -24,8 +24,7 @@ public class UserDAO {
         this.auditDAO = auditDAO;
     }
 
-    // Method to save user
-    public void saveUser(UserDTO user) {
+    public UserDTO saveUser(UserDTO user) {
         String sql = "INSERT INTO users (name) VALUES (?)";
         try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -33,19 +32,26 @@ public class UserDAO {
             preparedStatement.setString(1, user.getName());
             int rowsAffected = preparedStatement.executeUpdate();
 
+            if (rowsAffected == 0) {
+                throw new RuntimeException("Failed to insert user, no rows affected.");
+            }
+
             // Get the generated user ID
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                user.setId(generatedKeys.getLong(1));  // Set generated ID
+                user.setId(generatedKeys.getLong(1)); // Set the generated ID in the user object
+            } else {
+                throw new RuntimeException("Failed to retrieve the generated user ID.");
             }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error saving user: " + e.getMessage(), e);
         }
+        return user;
     }
 
     // Method to update user
-    public void updateUser(UserDTO user) {
+    public UserDTO updateUser(UserDTO user) {
         String sql = "UPDATE users SET name = ? WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -54,6 +60,7 @@ public class UserDAO {
             preparedStatement.setLong(2, user.getId());
 
             int rowsAffected = preparedStatement.executeUpdate();
+
             if (rowsAffected == 0) {
                 throw new RuntimeException("User with ID " + user.getId() + " not found.");
             }
@@ -61,6 +68,7 @@ public class UserDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error updating user: " + e.getMessage(), e);
         }
+        return user;
     }
 
 }

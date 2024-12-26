@@ -13,14 +13,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public void saveUser( @RequestBody UserDTO userDTO) {
+    public UserDTO saveUser( @RequestBody UserDTO userDTO) {
         System.out.println("Received user: " + userDTO);
-        userService.saveUser(userDTO);
+        return userService.saveUser(userDTO);
     }
 
     @PostMapping("/update")
-    public void updateUser( @RequestBody UserDTO userDTO) {
-        userService.updateUser(userDTO);
+    public UserDTO updateUser( @RequestBody UserDTO userDTO) {
+        return userService.updateUser(userDTO);
     }
 
 }
