@@ -1,12 +1,10 @@
 package com.example.demo.dao;
 
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.entity.Audit;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 
 @Repository
 public class OrderDAO {

@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -28,8 +30,13 @@ public class OrderController {
 
     @PostMapping("/update")
     public void updateOrder(@RequestBody OrderDTO order) {
-        orderService.updateOrder(order);
-        javers.commit("author", order);
+        System.out.println("order id: "+order.getId());
+        Map<String, String> commitProperties = new HashMap<>();
+        commitProperties.put("transactionId", "TX12345");
+        commitProperties.put("operationType", "OrderUpdate");
+        var commit = javers.commit("author", order, commitProperties);
+        System.out.println("javers commit: "+commit);
+//        orderService.updateOrder(order);
     }
 
     @GetMapping("/{id}")

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.dto.OrderDTO;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.repository.sql.DialectName;
@@ -24,6 +25,7 @@ public class JaversSqlAutoConfiguration {
     public Javers javers(JaversSqlRepository javersSqlRepository) {
         return JaversBuilder.javers()
                 .registerJaversRepository(javersSqlRepository)
+                .registerEntities(OrderDTO.class)
                 .build();
     }
 }
