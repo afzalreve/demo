@@ -6,13 +6,14 @@ import com.example.demo.dto.AuditDTO;
 import com.example.demo.util.CachedBodyHttpServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.ServletInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.nio.charset.StandardCharsets;
 
 
 @Component
@@ -33,9 +34,28 @@ public class AuditInterceptor implements HandlerInterceptor {
             String methodName = handlerMethod.getMethod().getName();
             String action = determineAction(methodName);
 
-            if (!action.equals("UNKNOWN") && request.getMethod().equals("POST")) {
+            System.out.println("HTTP Method: " + request.getMethod());
+            System.out.println("Request URI: " + request.getRequestURI());
+
+            System.out.println("Headers:");
+            request.getHeaderNames().asIterator().forEachRemaining(headerName ->
+                    System.out.println(headerName + ": " + request.getHeader(headerName))
+            );
+
+            System.out.println("Query Parameters:");
+            request.getParameterMap().forEach((key, value) ->
+                    System.out.println(key + ": " + String.join(", ", value))
+            );
+
+            if (!action.equals("UNKNOWN") && request.getMethod().equalsIgnoreCase("POST")) {
                 CachedBodyHttpServletRequest cachedRequest = new CachedBodyHttpServletRequest(request);
-                UserDTO userDTO = objectMapper.readValue(cachedRequest.getInputStream(), UserDTO.class);
+
+                String requestBody = new String(cachedRequest.getCachedBody(), StandardCharsets.UTF_8);
+                System.out.println("Request Body: " + requestBody);
+
+                UserDTO userDTO = objectMapper.readValue(requestBody, UserDTO.class);
+                System.out.println("Deserialized UserDTO: " + userDTO);
+
                 logAudit(userDTO, action);
             }
         }

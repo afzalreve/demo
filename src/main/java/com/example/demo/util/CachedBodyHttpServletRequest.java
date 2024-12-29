@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -15,31 +16,39 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
     public CachedBodyHttpServletRequest(HttpServletRequest request) throws IOException {
         super(request);
+
+        // Read the input stream and cache the body
         InputStream requestInputStream = request.getInputStream();
-        this.cachedBody = requestInputStream.readAllBytes();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = requestInputStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead);
+        }
+        cachedBody = byteArrayOutputStream.toByteArray();
     }
 
     @Override
     public ServletInputStream getInputStream() {
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(this.cachedBody);
-        return new CachedServletInputStream(byteArrayInputStream);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(cachedBody);
+        return new CachedBodyServletInputStream(byteArrayInputStream);
     }
 
-    private static class CachedServletInputStream extends ServletInputStream {
+    public byte[] getCachedBody() {
+        return cachedBody;
+    }
 
-        private final InputStream inputStream;
+    private static class CachedBodyServletInputStream extends ServletInputStream {
 
-        public CachedServletInputStream(InputStream inputStream) {
-            this.inputStream = inputStream;
+        private final ByteArrayInputStream byteArrayInputStream;
+
+        public CachedBodyServletInputStream(ByteArrayInputStream byteArrayInputStream) {
+            this.byteArrayInputStream = byteArrayInputStream;
         }
 
         @Override
         public boolean isFinished() {
-            try {
-                return inputStream.available() == 0;
-            } catch (IOException e) {
-                return true;
-            }
+            return byteArrayInputStream.available() == 0;
         }
 
         @Override
@@ -49,12 +58,12 @@ public class CachedBodyHttpServletRequest extends HttpServletRequestWrapper {
 
         @Override
         public void setReadListener(ReadListener listener) {
-            // No implementation needed
+            throw new UnsupportedOperationException();
         }
 
         @Override
-        public int read() throws IOException {
-            return inputStream.read();
+        public int read() {
+            return byteArrayInputStream.read();
         }
     }
 }
