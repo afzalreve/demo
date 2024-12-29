@@ -3,6 +3,7 @@ package com.example.demo.interceptor;
 import com.example.demo.dao.AuditDAO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.dto.AuditDTO;
+import com.example.demo.util.CachedBodyHttpServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.ServletInputStream;
@@ -28,21 +29,13 @@ public class AuditInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        System.out.println("inside handler");
         if (handler instanceof HandlerMethod handlerMethod) {
             String methodName = handlerMethod.getMethod().getName();
-            System.out.println("methodName: "+methodName);
             String action = determineAction(methodName);
-            System.out.println("action: " + action);
 
             if (!action.equals("UNKNOWN") && request.getMethod().equals("POST")) {
-                System.out.println("inside not unknown");
-                ServletInputStream inputStream = request.getInputStream();
-                System.out.println("inputStream: " + inputStream);
-                UserDTO userDTO = objectMapper.readValue(inputStream, UserDTO.class);
-                System.out.println("userDTO: "+userDTO);
-                System.out.println("userDTO id: "+userDTO.getId());
-
+                CachedBodyHttpServletRequest cachedRequest = new CachedBodyHttpServletRequest(request);
+                UserDTO userDTO = objectMapper.readValue(cachedRequest.getInputStream(), UserDTO.class);
                 logAudit(userDTO, action);
             }
         }
@@ -57,11 +50,11 @@ public class AuditInterceptor implements HandlerInterceptor {
         };
     }
 
-    private void logAudit( UserDTO order, String action) {
+    private void logAudit(UserDTO userDTO, String action) {
         AuditDTO auditDTO = new AuditDTO();
         auditDTO.setAction(action);
         auditDTO.setTableName("users");
-        auditDTO.setRecordId(order.getId());
+        auditDTO.setRecordId(userDTO.getId());
         auditDAO.logAudit(auditDTO);
     }
 }

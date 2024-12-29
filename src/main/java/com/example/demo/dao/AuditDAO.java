@@ -24,6 +24,7 @@ public class AuditDAO {
     public void logAudit( AuditDTO auditDTO ) {
         System.out.println("inside auditDAO.logAudit");
         String sql = "INSERT INTO audit (action, table_name, record_id) VALUES (?, ?, ?)";
+        System.out.println("sql: "+sql);
         try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, auditDTO.getAction());
