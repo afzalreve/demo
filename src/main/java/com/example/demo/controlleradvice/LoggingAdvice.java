@@ -18,7 +18,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 public class LoggingAdvice {
 
     @ModelAttribute
-    public void logRequest( HttpServletRequest request) throws IOException {
+    public void logRequest(HttpServletRequest request) throws IOException {
         if (!(request instanceof ContentCachingRequestWrapper)) {
             return; // Ensure the request is wrapped
         }

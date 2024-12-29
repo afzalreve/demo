@@ -23,9 +23,10 @@ public class RequestCachingFilter implements Filter {
         }
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-
-        // Wrap the request
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(httpServletRequest);
+
+        // Read the body to populate the cache
+        wrappedRequest.getContentAsByteArray();
 
         // Proceed with the filter chain
         chain.doFilter(wrappedRequest, response);
