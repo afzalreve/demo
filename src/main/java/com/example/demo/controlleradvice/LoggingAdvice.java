@@ -2,25 +2,30 @@ package com.example.demo.controlleradvice;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @RestControllerAdvice
 public class LoggingAdvice {
 
     @ModelAttribute
-    public void logRequest(HttpServletRequest request) throws IOException {
-        // Wrap the request to cache the body if not already wrapped
+    public void logRequest( HttpServletRequest request) throws IOException {
         if (!(request instanceof ContentCachingRequestWrapper)) {
-            request = new ContentCachingRequestWrapper(request);
+            return; // Ensure the request is wrapped
         }
 
-        logRequestDetails((ContentCachingRequestWrapper) request);
+        ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
+
+        logRequestDetails(cachingRequest);
     }
 
     private void logRequestDetails(ContentCachingRequestWrapper request) throws IOException {
@@ -38,7 +43,8 @@ public class LoggingAdvice {
         System.out.println("Body: " + body);
     }
 
-    private String extractBody(ContentCachingRequestWrapper request) throws IOException {
+    private String extractBody(ContentCachingRequestWrapper request) throws UnsupportedEncodingException
+    {
         byte[] content = request.getContentAsByteArray();
         return content.length > 0 ? new String(content, request.getCharacterEncoding()) : "<empty>";
     }
