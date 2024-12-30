@@ -3,6 +3,7 @@ package com.example.demo.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -12,14 +13,16 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-//@Component
+@Component
 public class LoggingFilter implements Filter {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoggingFilter.class);
+
     @Override
-    public void doFilter(jakarta.servlet.ServletRequest request,
-                         jakarta.servlet.ServletResponse response,
-                         FilterChain chain)
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -35,35 +38,52 @@ public class LoggingFilter implements Filter {
         // Log API Endpoint
         String method = wrappedRequest.getMethod();
         String uri = wrappedRequest.getRequestURI();
-        System.out.println("HTTP Method: " + method);
-        System.out.println("API Endpoint: " + uri);
+        logger.info("HTTP Method: {}", method);
+        logger.info("API Endpoint: {}", uri);
 
         // Log Query Parameters
         String queryParams = wrappedRequest.getQueryString();
-        System.out.println("Query Parameters: " + (queryParams != null ? queryParams : "None"));
+        logger.info("Query Parameters: {}", queryParams != null ? queryParams : "None");
 
         // Log Headers
-        System.out.println("Headers: ");
+        logger.info("Headers: ");
         Enumeration<String> headerNames = wrappedRequest.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             String headerValue = wrappedRequest.getHeader(headerName);
-            System.out.println(headerName + ": " + headerValue);
+            logger.info("{}: {}", headerName, headerValue);
         }
 
         // Log Client IP
         String clientIp = wrappedRequest.getRemoteAddr();
-        System.out.println("Client IP: " + clientIp);
+        logger.info("Client IP: {}", clientIp);
 
         // Log Request Body
         String requestBody = new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8);
-        System.out.println("Request Body: " + (requestBody.isEmpty() ? "None" : requestBody));
+        logger.info("Request Body: {}", requestBody.isEmpty() ? "None" : requestBody);
+
+        // Log HttpSession Details
+        HttpSession session = httpServletRequest.getSession(false); // Use false to avoid creating a new session
+        if (session != null) {
+            logger.info("Session ID: {}", session.getId());
+            logger.info("Session Creation Time: {}", session.getCreationTime());
+            logger.info("Session Last Accessed Time: {}", session.getLastAccessedTime());
+            logger.info("Session Attributes:");
+            Enumeration<String> attributeNames = session.getAttributeNames();
+            while (attributeNames.hasMoreElements()) {
+                String attributeName = attributeNames.nextElement();
+                Object attributeValue = session.getAttribute(attributeName);
+                logger.info("{}: {}", attributeName, attributeValue);
+            }
+        } else {
+            logger.info("No active session.");
+        }
 
         // Log Response Status and Body
         int status = wrappedResponse.getStatus();
         String responseBody = new String(wrappedResponse.getContentAsByteArray(), StandardCharsets.UTF_8);
-        System.out.println("Response Status: " + status);
-        System.out.println("Response Body: " + (responseBody.isEmpty() ? "None" : responseBody));
+        logger.info("Response Status: {}", status);
+        logger.info("Response Body: {}", responseBody.isEmpty() ? "None" : responseBody);
 
         // Copy response content back to the original response
         wrappedResponse.copyBodyToResponse();
