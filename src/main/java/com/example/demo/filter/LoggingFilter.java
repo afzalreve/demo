@@ -1,10 +1,12 @@
 package com.example.demo.filter;
 
 
+import com.example.demo.dto.UserDTO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,6 +63,13 @@ public class LoggingFilter implements Filter {
         // Log Request Body
         String requestBody = new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8);
         logger.info("Request Body: {}", requestBody.isEmpty() ? "None" : requestBody);
+
+        UserDTO userDTO = new UserDTO();
+        ServletRequestDataBinder binder = new ServletRequestDataBinder(userDTO);
+        binder.bind(wrappedRequest);
+
+        logger.info("User DTO: {}", userDTO); // both id and name are null
+
 
         // Log HttpSession Details
         HttpSession session = wrappedRequest.getSession(false); // Use false to avoid creating a new session
