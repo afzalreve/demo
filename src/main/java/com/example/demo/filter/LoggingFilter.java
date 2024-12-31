@@ -63,7 +63,7 @@ public class LoggingFilter implements Filter {
         logger.info("Request Body: {}", requestBody.isEmpty() ? "None" : requestBody);
 
         // Log HttpSession Details
-        HttpSession session = httpServletRequest.getSession(false); // Use false to avoid creating a new session
+        HttpSession session = wrappedRequest.getSession(false); // Use false to avoid creating a new session
         if (session != null) {
             logger.info("Session ID: {}", session.getId());
             logger.info("Session Creation Time: {}", session.getCreationTime());
