@@ -1,0 +1,17 @@
+1735796167634|3|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735796232955|2|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735796387571|3|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT @@character_set_database, @@sql_mode|SELECT @@character_set_database, @@sql_mode
+1735796410155|2|statement|connection 10|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735796846812|4|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT @@character_set_database, @@sql_mode|SELECT @@character_set_database, @@sql_mode
+1735796848924|1|statement|connection 10|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735796935159|5|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT @@character_set_database, @@sql_mode|SELECT @@character_set_database, @@sql_mode
+1735796947026|1|statement|connection 10|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735796990930|3|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT @@character_set_database, @@sql_mode|SELECT @@character_set_database, @@sql_mode
+1735797009762|2|statement|connection 10|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735797104626|6|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT @@character_set_database, @@sql_mode|SELECT @@character_set_database, @@sql_mode
+1735797116315|1|statement|connection 10|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1735797347305|39|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
+1735797353541|37|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
+1735797418158|35|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
+1735797471343|33|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
+1735797477517|37|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1

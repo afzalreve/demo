@@ -18,11 +18,6 @@ public class UserDAO {
     @Value("${spring.datasource.password}")
     private String jdbcPassword;
 
-    private final AuditDAO auditDAO;
-
-    public UserDAO( AuditDAO auditDAO) {
-        this.auditDAO = auditDAO;
-    }
 
     public UserDTO saveUser(UserDTO user) {
         String sql = "INSERT INTO users (name) VALUES (?)";
