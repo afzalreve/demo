@@ -1,27 +1,24 @@
 package com.example.demo.dao;
 
 import com.example.demo.dto.UserDTO;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 @Repository
 public class UserDAO {
 
-    @Value("${spring.datasource.url}")
-    private String jdbcUrl;
+    private final DataSource dataSource;
 
-    @Value("${spring.datasource.username}")
-    private String jdbcUsername;
-
-    @Value("${spring.datasource.password}")
-    private String jdbcPassword;
-
+    public UserDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     public UserDTO saveUser(UserDTO user) {
         String sql = "INSERT INTO users (name) VALUES (?)";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, user.getName());
@@ -45,10 +42,9 @@ public class UserDAO {
         return user;
     }
 
-    // Method to update user
     public UserDTO updateUser(UserDTO user) {
         String sql = "UPDATE users SET name = ? WHERE id = ?";
-        try (Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, user.getName());
@@ -65,5 +61,4 @@ public class UserDAO {
         }
         return user;
     }
-
 }
