@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class DemoApplication {
 
 	public static void main(String[] args) {
+//		System.setProperty("p6spy.config.file", "classpath:spy.properties"); // not sure whether this is required
 		SpringApplication.run(DemoApplication.class, args);
 	}
 

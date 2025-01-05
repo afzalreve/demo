@@ -21,3 +21,16 @@
 1736050724514|3|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
 1736050780229|6|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
 1736050929261|1|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736051565283|1|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736051806555|1|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736052197288|2|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736052273326|2|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+#1736052897866 | took 1ms | statement | connection 0| url jdbc:mysql://localhost:3306/loggerdemo
+UPDATE users SET name = ? WHERE id = ?
+UPDATE users SET name = 'abcde' WHERE id = 3;
+#1736052936940 | took 1ms | statement | connection 0| url jdbc:mysql://localhost:3306/loggerdemo
+UPDATE users SET name = ? WHERE id = ?
+UPDATE users SET name = 'abcde' WHERE id = 3;
+#1736053065613 | took 0ms | statement | connection 1| url jdbc:mysql://localhost:3306/loggerdemo
+UPDATE users SET name = ? WHERE id = ?
+UPDATE users SET name = 'abcde' WHERE id = 3;

@@ -8,7 +8,7 @@ public class CustomP6SpyLogger extends com.p6spy.engine.spy.appender.StdoutLogge
 
     @Override
     public void logSQL( int connectionId, String now, long elapsed, Category category, String prepared, String sql, String url) {
-        System.out.println("Intercepted SQL: " + sql);
+        System.out.println("Intercepted SQL: " + sql); // this line is not being printed
         if (sql != null && sql.trim().toLowerCase().startsWith("update")) {
             // Log the SQL (optional)
             System.out.println("Intercepted Update SQL: " + sql);
