@@ -34,3 +34,9 @@ UPDATE users SET name = 'abcde' WHERE id = 3;
 #1736053065613 | took 0ms | statement | connection 1| url jdbc:mysql://localhost:3306/loggerdemo
 UPDATE users SET name = ? WHERE id = ?
 UPDATE users SET name = 'abcde' WHERE id = 3;
+#1736053520719 | took 1ms | statement | connection 0| url jdbc:mysql://localhost:3306/loggerdemo
+UPDATE users SET name = ? WHERE id = ?
+UPDATE users SET name = 'abcde' WHERE id = 3;
+#1736055454153 | took 1ms | statement | connection 0| url jdbc:mysql://localhost:3306/loggerdemo
+UPDATE users SET name = ? WHERE id = ?
+UPDATE users SET name = 'abcde' WHERE id = 3;
