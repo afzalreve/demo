@@ -4,8 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing
+//@EnableJpaAuditing
 @SpringBootApplication
+//@SpringBootApplication(exclude = { HibernateJpaAutoConfiguration.class})
 public class DemoApplication {
 
 	public static void main(String[] args) {

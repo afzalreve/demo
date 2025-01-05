@@ -15,3 +15,9 @@
 1735797418158|35|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
 1735797471343|33|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
 1735797477517|37|statement|connection 0|url jdbc:p6spy:mysql://localhost:3306/loggerdemo|SELECT 1|SELECT 1
+1736050469999|11|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736050561276|1|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736050669209|1|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736050724514|3|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736050780229|6|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
+1736050929261|1|statement|connection 0|url jdbc:mysql://localhost:3306/loggerdemo|UPDATE users SET name = ? WHERE id = ?|UPDATE users SET name = 'abcde' WHERE id = 3
