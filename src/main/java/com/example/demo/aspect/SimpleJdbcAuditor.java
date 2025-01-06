@@ -6,6 +6,7 @@ import com.example.demo.dao.AuditDAO;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,11 @@ public class SimpleJdbcAuditor {
 
     @Autowired
     private AuditDAO auditDAO;
+
+//    @Around("execution(* java.sql.Statement.executeUpdate(..)) || " +
+//            "execution(* java.sql.PreparedStatement.executeUpdate(..)) || " +
+//            "execution(* java.sql.Statement.execute(..)) || " +
+//            "execution(* java.sql.PreparedStatement.execute(..))")
 
     // Intercepts saveOrder and updateOrder methods in OrderDAO
     @Around("execution(* com.example.demo.dao.OrderDAO.*Order(..))")
